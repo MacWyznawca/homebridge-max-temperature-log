@@ -1,28 +1,4 @@
-// Maximum daily temperature Accessory plugin for HomeBridge for read max. temp from [homebridge-mqtt-temperature-log-tasmota]
-//
-// Remember to add accessory to config.json. Example:
-/* 	"accessories": [
-	{
-		"accessory": "min-temperature-log",
-
-		"name": "NAME OF THIS ACCESSORY",
-
-		"topic": "tele/sonoff/SENSOR",
-
-		"patchToRead":"/root/.homebridge/",
-
-		"timeOffset": "-60",
-
-		"freq": "10",
-
-		"manufacturer": "ITEAD",
-		"model": "Sonoff TH",
-		"serialNumberMAC": "MAC OR SERIAL NUMBER"
-
-	}]
-*/
-// When you attempt to add a device, it will ask for a "PIN code".
-// The default code for all HomeBridge accessories is 031-45-154.
+// Maximum daily temperature Accessory plugin for HomeBridge for read max. temp from [homebridge-mqtt-temperature-log-tasmota] by @MacWyznawca Jaromir Kopp
 
 var inherits = require('util').inherits;
 var Service, Characteristic;
@@ -125,6 +101,9 @@ function MaxTemperatureLogAccessory(log, config) {
 		.getCharacteristic(this.Timestamp)
 		.on('get', this.getTimestamp.bind(this));
 
+// Initial data read and publish
+	this.getState.bind(this);
+	
 	this.getState.bind(this);
 	setInterval(() => {
 		this.getState.bind(this);

@@ -1,0 +1,6 @@
+/* 0.9.0 20170302
+ * The first version, which I'm happy ;-)
+ * 
+ * 0.0.1 20170228
+ * First npm public release 
+ */
