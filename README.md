@@ -35,10 +35,8 @@ Sample HomeBridge Configuration
 			"topic": "tele/sonoffrf200/SENSOR",
 			
 			"patchToRead":"/root/.homebridge/",
-			
-			"timeOffset": "-60",
-			
-			"freq": "10"
+						
+			"freq": "2"
 		}
 	]
 }
@@ -49,6 +47,4 @@ Sample HomeBridge Configuration
 
 **"patchToRead":"/root/.homebridge/"** - path to save text files with temperature data. Must by the same like in **homebridge-mqtt-temperature-log-tasmota** config!
 
-**timeOffset": "-60"** - timezone offset (minutes) if You chave problems witch timezone (like me).
-
-**"freq": "10"** - How often has a plugin to publish information (minutes).
+**"freq": "2"** - How often has a plugin to publish information (minutes).

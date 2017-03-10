@@ -9,15 +9,8 @@ module.exports = function(homebridge) {
 	homebridge.registerAccessory("homebridge-max-temperature-log", "max-temperature-log", MaxTemperatureLogAccessory);
 }
 
-function convertDateUTCDtoLocalStr(date, timeOffset) {
-	date = new Date(date);
-	var localOffset;
-	if(timeOffset != 0){
-		localOffset = timeOffset * 60000;
-	}
-	else {
-		localOffset = date.getTimezoneOffset() * 60000;
-	}
+function convertDateUTCDtoLocalStr(date) {
+	var localOffset = date.getTimezoneOffset() * 60000;
 	var localTime = date.getTime();
 	date = localTime - localOffset;
 	date = (new Date(date)).toISOString().replace(/T/, ' ').replace(/\..+/, '');
@@ -32,7 +25,6 @@ function MaxTemperatureLogAccessory(log, config) {
 	this.manufacturer = config["manufacturer"] || "MacWyznawca";
 	this.model = config["model"] || "24h max temp.";
 	this.serialNumberMAC = config["serialNumberMAC"] || "";
-	this.timeOffset = parseInt(config["timeOffset"]) || 0;
 	this.freq = (config["freq"] || 5) * 60000 ;
 
 	this.topic = config["topic"];
@@ -102,9 +94,11 @@ function MaxTemperatureLogAccessory(log, config) {
 		.on('get', this.getTimestamp.bind(this));
 
 // Initial data read and publish
-	this.getState.bind(this);
 	
-	this.getState.bind(this);
+	this.service.setCharacteristic(this.Timestamp, this.dateTime);
+	this.service.setCharacteristic(Characteristic.StatusActive, this.activeStat);
+	this.service.setCharacteristic(Characteristic.StatusFault, this.faultStat);
+
 	setInterval(() => {
 		this.getState.bind(this);
 	}, this.freq);
@@ -127,15 +121,14 @@ MaxTemperatureLogAccessory.prototype.getState = function(callback) {
 		minMaxTmp = data.split("\t");
 		this.temperature = parseFloat(minMaxTmp[1]);
 		if((new Date(minMaxTmp[0])).getTime()>0){			
-			this.dateTime = convertDateUTCDtoLocalStr(new Date(minMaxTmp[0]),this.timeOffset);
+			this.dateTime = convertDateUTCDtoLocalStr(new Date(minMaxTmp[0]));
 			var date = (new Date(minMaxTmp[0])).getTime();
 			if ((new Date).getTime() - date > 90000000) {
 				this.faultStat = true;
 			} else {
 				this.faultStat = false;
 			}
-		}
-		else {
+		} else {
 			this.faultStat = true;
 		}
 	}

@@ -1,4 +1,9 @@
-/* 0.9.0 20170302
+/*
+ * 0.9.5 20170302 
+ * Better handling of time zones.
+ * Remove time offset from settings.
+ *
+ * 0.9.0 20170302
  * The first version, which I'm happy ;-)
  * 
  * 0.0.1 20170228
